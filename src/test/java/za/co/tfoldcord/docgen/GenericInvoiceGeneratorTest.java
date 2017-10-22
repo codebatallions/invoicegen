@@ -23,13 +23,14 @@ public class GenericInvoiceGeneratorTest {
     private Map<HeaderDetails, String> headerDetails;
     private Map<FooterDetails, String> footerDetails;
     private String [][] rowData;
-    GenericInvoiceGenerator generator ;
+    private BasicInvoiceEventDTO invoiceDTO;
+    BasicInvoice generator ;
 
     @Test
     @DisplayName("Test Generate Invoice File on users home directory")
     public void generateInvoiceBytes() {
         try{
-            generator.generateInvoiceFile(rowData);
+            generator.generateInvoiceFile(invoiceDTO);
         }catch(Exception e){
 
         }
@@ -76,7 +77,28 @@ public class GenericInvoiceGeneratorTest {
             }
         }
 
-         generator = new GenericInvoiceGenerator(invoiceColumns, headerDetails, footerDetails);
+         generator = new BasicInvoice(headerDetails);
+         invoiceDTO = new BasicInvoiceEventDTO();
+         List<String> activities = new ArrayList<String>();
+         
+          activities.add("Dancing, 233232");
+          activities.add("Golf , 23232.22");
+          activities.add("Dinner, 234");
+          activities.add("Sky Diving, 123");
+          activities.add("Kareoke, 233.33");
+         
+         invoiceDTO.setEventName("Serious Events");
+         invoiceDTO.setPackageAmount("12333.00");
+         invoiceDTO.setPackageName("Platinum Package");
+         invoiceDTO.setActivities(activities);
+         invoiceDTO.setPaymentDetails("Standard Bank, Savings Account, 1232323232323; 34545; Reference  : Team Name");
+         invoiceDTO.setTeamAddress("1 Enterpirse Road, Fairlands , Johannesburg, 2002");
+         invoiceDTO.setTeamContact("Team Leader");
+         invoiceDTO.setTeamName("Economic Freedom Fighters");
+         invoiceDTO.setTeamTotal("23233232.22");
+         
+         
+         
     }
 
     private File getFile(String filename) {

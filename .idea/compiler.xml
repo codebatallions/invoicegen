@@ -9,7 +9,7 @@
         <module name="invoicegen" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="1.8">
+    <bytecodeTargetLevel>
       <module name="invoicegen" target="1.8" />
     </bytecodeTargetLevel>
   </component>
