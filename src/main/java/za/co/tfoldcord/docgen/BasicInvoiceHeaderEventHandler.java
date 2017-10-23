@@ -1,9 +1,11 @@
 package za.co.tfoldcord.docgen;
 
+import java.net.MalformedURLException;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.io.source.ByteArrayOutputStream;
 import com.itextpdf.kernel.color.Color;
 import com.itextpdf.kernel.color.DeviceRgb;
@@ -21,6 +23,7 @@ import com.itextpdf.layout.Document;
 import com.itextpdf.layout.Style;
 import com.itextpdf.layout.border.Border;
 import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Text;
@@ -41,7 +44,7 @@ public class BasicInvoiceHeaderEventHandler implements IEventHandler {
     protected Document doc;
     protected Map<HeaderDetails, String> headerDetails;
 
-    public BasicInvoiceHeaderEventHandler(Document doc, Map<HeaderDetails, String> headerDetails) {
+    public BasicInvoiceHeaderEventHandler(Document doc, Map<HeaderDetails, String> headerDetails) throws MalformedURLException {
         this.doc = doc;
         this.headerDetails = headerDetails;
         table = headerTable();
@@ -70,7 +73,7 @@ public class BasicInvoiceHeaderEventHandler implements IEventHandler {
         return tableHeight;
     }
 
-    private Table headerTable(){
+    private Table headerTable() throws MalformedURLException{
         Table table = new Table(2);
         table.setWidth(500);
         Color rightColor =  new DeviceRgb(176,224,230);
@@ -82,18 +85,22 @@ public class BasicInvoiceHeaderEventHandler implements IEventHandler {
 
         //left side 
         if(StringUtils.isNotEmpty(headerDetails.get(HeaderDetails.COMPANY_NAME))) {
-            cell = (new Cell().add(new Paragraph(headerDetails.get(HeaderDetails.COMPANY_NAME)).setFontSize(24).setBorder(Border.NO_BORDER)).addStyle(style));
+        	Paragraph logoName = new Paragraph();
+        	Image image = new Image(ImageDataFactory.create(headerDetails.get(HeaderDetails.LOGO_URL)));
+            image.setAutoScale(false);
+            
+            logoName.add(image);
+            //logoName.add(headerDetails.get(HeaderDetails.COMPANY_NAME));
+           
+            cell = (new Cell().add(logoName).setBorder(Border.NO_BORDER)).addStyle(style);
             cell.setBackgroundColor(leftColor);
             table.addCell(cell);
         }else {
         	addBlankCell(table, leftColor);
         }
         
-        // right side 
-        cell = (new Cell().add(new Paragraph("Invoice").setFontSize(24).setBorder(Border.NO_BORDER)).addStyle(style));
-        cell.setTextAlignment(TextAlignment.RIGHT);
-        cell.setBackgroundColor(rightColor);
-        table.addCell(cell);
+        // right side         
+        addBlankCell(table, rightColor);
         //left side
         if(StringUtils.isNotEmpty(headerDetails.get(HeaderDetails.PHYSICAL_ADDRESS))) {
         	String [] addressLines = headerDetails.get(HeaderDetails.PHYSICAL_ADDRESS).split(",");
@@ -115,11 +122,11 @@ public class BasicInvoiceHeaderEventHandler implements IEventHandler {
         }
         
         // right side - invoice date
-        cell = (new Cell().add(new Paragraph(DocGenUtils.nowDate()).setFontSize(7).setBorder(Border.NO_BORDER)).addStyle(style));
+        cell = (new Cell().add(new Paragraph("Invoice").setFontSize(24).setBorder(Border.NO_BORDER)).addStyle(style));
         cell.setTextAlignment(TextAlignment.RIGHT);
-        cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
         cell.setBackgroundColor(rightColor);
         table.addCell(cell);
+        
         
         
         //left side        
@@ -142,7 +149,12 @@ public class BasicInvoiceHeaderEventHandler implements IEventHandler {
         }
        
         //right side
-        addBlankCell(table, rightColor);
+        cell = (new Cell().add(new Paragraph(DocGenUtils.nowDate()).setFontSize(7).setBorder(Border.NO_BORDER)).addStyle(style));
+        cell.setTextAlignment(TextAlignment.RIGHT);
+        cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+        cell.setBackgroundColor(rightColor);
+        table.addCell(cell);
+        
         
         
         //left side
