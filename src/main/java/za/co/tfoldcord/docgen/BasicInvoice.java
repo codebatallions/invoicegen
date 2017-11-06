@@ -47,7 +47,7 @@ public class BasicInvoice extends PdfBase{
 
 	    /**
 	     * 
-	     * @param rowData actual row items on document
+	     * @param eventDTo actual row items on document
 	     * @param baos byte stream where file should be created
 	     * @throws DocGenException 
 	     */
@@ -59,11 +59,13 @@ public class BasicInvoice extends PdfBase{
 	            PdfFont normal = PdfFontFactory.createFont(FontConstants.TIMES_ROMAN);
 
 	            PdfDocument pdf = new PdfDocument(writer);
+
 	            PageRotationEventHandler eventHandler = new PageRotationEventHandler();
 
-
+            	
 	            pdf.addEventHandler(PdfDocumentEvent.START_PAGE, eventHandler);
 	            Document document = new Document(pdf);
+	            
 	            // header details
 	            BasicInvoiceHeaderEventHandler handler = new BasicInvoiceHeaderEventHandler(document, invoiceHeader);
 	            pdf.addEventHandler(PdfDocumentEvent.END_PAGE, handler);
@@ -81,8 +83,8 @@ public class BasicInvoice extends PdfBase{
 
 
 	             document.add(invoiceDetails);
-	            //FooterEventHandler footerHandler = new FooterEventHandler(footerDetails);
-	            //pdf.addEventHandler(PdfDocumentEvent.END_PAGE,footerHandler);
+	             BasicInvoiceFooterEventHandler  footerHandler = new BasicInvoiceFooterEventHandler(eventDTo.getPaymentDetails());
+	             pdf.addEventHandler(PdfDocumentEvent.END_PAGE,footerHandler);
 	            document.close();
 
 
@@ -123,6 +125,7 @@ public class BasicInvoice extends PdfBase{
 
 
 
+
 	            Table clientDetails = createClientDetails(eventDTo.getTeamName(), eventDTo.getTeamContact(), eventDTo.getTeamAddress());
 	            clientDetails.setHorizontalAlignment(HorizontalAlignment.CENTER);
 	            document.add(clientDetails);
@@ -131,8 +134,8 @@ public class BasicInvoice extends PdfBase{
 	           
 	          
 	             document.add(invoiceDetails);
-	            //FooterEventHandler footerHandler = new FooterEventHandler(footerDetails);
-	            //pdf.addEventHandler(PdfDocumentEvent.END_PAGE,footerHandler);
+	            BasicInvoiceFooterEventHandler footerHandler = new BasicInvoiceFooterEventHandler(eventDTo.getPaymentDetails());
+	            pdf.addEventHandler(PdfDocumentEvent.END_PAGE,footerHandler);
 	            document.close();
 
 	        } catch (Exception e) {
@@ -156,7 +159,7 @@ public class BasicInvoice extends PdfBase{
 	         Cell cell = new Cell().add(para);
 	         cell.setBorder(Border.NO_BORDER);
 	         table.addCell(cell);
-	         String [] address = clientAddress.split(",");
+	         String [] address = clientAddress == null ? new String [] {""} : clientAddress.split(",");
 	         para = new Paragraph();
 	         for(String addrLine : address) {
 	        	 para.add(new Text(addrLine+"\n").setFontSize(7));

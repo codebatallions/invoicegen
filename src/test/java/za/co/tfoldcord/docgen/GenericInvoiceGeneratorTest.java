@@ -48,9 +48,9 @@ public class GenericInvoiceGeneratorTest {
         }
        // headerDetails.forEach((k,v)->System.out.println("HKey : " + k + "HValue : " + v));
         // setup footer
-        for(FooterDetails footie : FooterDetails.values()){
+        /*for(FooterDetails footie : FooterDetails.values()){
             footerDetails.put(footie, (String)footers.get(footie.name()));
-        }
+        }*/
        // footerDetails.forEach((k,v)->System.out.println("FKey : " + k + "FValue : " + v));
         // setup column names and ratio
         File data = getFile("invoice.csv");
@@ -91,7 +91,7 @@ public class GenericInvoiceGeneratorTest {
          invoiceDTO.setPackageAmount("12333.00");
          invoiceDTO.setPackageName("Platinum Package");
          invoiceDTO.setActivities(activities);
-         invoiceDTO.setPaymentDetails("Standard Bank, Savings Account, 1232323232323; 34545; Reference  : Team Name");
+         invoiceDTO.setPaymentDetails("Bank, Standard Bank, Accout Type,  Savings Account,Account Number,  1232323232323, Branch  34545, Branch Code, 233434, Reference, 345345345");
          invoiceDTO.setTeamAddress("1 Enterpirse Road, Fairlands , Johannesburg, 2002");
          invoiceDTO.setTeamContact("Team Leader");
          invoiceDTO.setTeamName("Economic Freedom Fighters");

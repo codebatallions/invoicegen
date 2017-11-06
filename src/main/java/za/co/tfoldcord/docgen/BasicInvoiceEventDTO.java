@@ -14,6 +14,7 @@ public class BasicInvoiceEventDTO {
 	private String teamTotal;
 	
 	
+	
 	public BasicInvoiceEventDTO() {
 		
 	}
@@ -76,7 +77,5 @@ public class BasicInvoiceEventDTO {
 	public void setPaymentDetails(String paymentDetails) {
 		this.paymentDetails = paymentDetails;
 	}
-	
-	
-	
+
 }

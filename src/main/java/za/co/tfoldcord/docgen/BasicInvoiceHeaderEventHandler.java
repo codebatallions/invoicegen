@@ -50,6 +50,9 @@ public class BasicInvoiceHeaderEventHandler implements IEventHandler {
         table = headerTable();
         TableRenderer renderer = (TableRenderer) table.createRendererSubTree();
         renderer.setParent(new Document(new PdfDocument(new PdfWriter(new ByteArrayOutputStream()))).getRenderer());
+        if(renderer == null) {
+        	throw new MalformedURLException("Cant get image ...");
+        }
         tableHeight = renderer.layout(new LayoutContext(new LayoutArea(0, PageSize.A4))).getOccupiedArea().getBBox().getHeight();
     }
 
@@ -76,8 +79,8 @@ public class BasicInvoiceHeaderEventHandler implements IEventHandler {
     private Table headerTable() throws MalformedURLException{
         Table table = new Table(2);
         table.setWidth(500);
-        Color rightColor =  new DeviceRgb(176,224,230);
-        Color leftColor =  new DeviceRgb(176,224,230);// new DeviceRgb(76,196,222);
+        Color rightColor =  new DeviceRgb(51, 76, 158);
+        Color leftColor =  new DeviceRgb(51, 76, 158);// new DeviceRgb(76,196,222);
         //table.setBorder(Border.SOLID);
         Style style = new Style()
                 .setBorder(Border.NO_BORDER);
